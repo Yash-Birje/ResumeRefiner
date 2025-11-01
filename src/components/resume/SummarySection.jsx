@@ -84,14 +84,31 @@ const SummarySection = ({ data, targetRole, personalInfo, experience, education,
               </label>
               <button
                 onClick={handleGenerateAI}
-                disabled={!targetRole}
+                disabled={!targetRole || isGenerating}
                 className="flex items-center space-x-1 px-3 py-1.5 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title={!targetRole ? 'Please set a target role first' : 'Generate with AI'}
               >
-                <Sparkles className="w-4 h-4" />
-                <span>Generate with AI</span>
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Generating...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4" />
+                    <span>Generate with AI</span>
+                  </>
+                )}
               </button>
             </div>
+
+            {/* Error Message */}
+            {error && (
+              <div className="mb-3 flex items-start space-x-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-red-700">{error}</p>
+              </div>
+            )}
 
             <textarea
               value={data || ''}
