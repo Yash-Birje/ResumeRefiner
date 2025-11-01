@@ -1,11 +1,19 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Trash2, Plus, X, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronUp, Trash2, Plus, X, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 import { validateDateRange } from '../../utils/validation';
 import { VALIDATION_RULES } from '../../utils/constants';
+import { improveBullet } from '../../api/geminiService';
+import Modal from '../shared/Modal';
 
 const ExperienceEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
   const [isExpanded, setIsExpanded] = useState(index === 0);
   const [errors, setErrors] = useState({});
+  const [improvingBullet, setImprovingBullet] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [originalBullet, setOriginalBullet] = useState('');
+  const [improvedBullet, setImprovedBullet] = useState('');
+  const [currentBulletIndex, setCurrentBulletIndex] = useState(null);
+  const [error, setError] = useState('');
 
   const handleChange = (field, value) => {
     onUpdate({ [field]: value });
