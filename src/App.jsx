@@ -35,8 +35,8 @@ function App() {
               }
             />
 
-            {/* Resume Builder Routes - Will be implemented */}
-            {/* <Route
+            {/* Resume Builder Routes */}
+            <Route
               path="/resume/new"
               element={
                 <ProtectedRoute>
@@ -52,7 +52,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
+            {/* <Route
               path="/resume/:id/preview"
               element={
                 <ProtectedRoute>
