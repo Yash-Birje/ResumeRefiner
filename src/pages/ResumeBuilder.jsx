@@ -233,7 +233,7 @@ const ResumeBuilder = () => {
           </div>
 
           {/* Right: Preview */}
-          <div className="w-1/2 overflow-y-auto bg-gray-100">
+          <div className="w-1/2 overflow-y-auto bg-gray-100" ref={previewRef}>
             <ResumePreview resume={currentResume} />
           </div>
         </div>
