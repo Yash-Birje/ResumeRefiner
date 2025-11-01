@@ -18,6 +18,9 @@ const ResumeForm = ({ resume, onUpdate }) => {
       <SummarySection
         data={resume.summary}
         targetRole={resume.targetRole}
+        personalInfo={resume.personalInfo}
+        experience={resume.experience}
+        education={resume.education}
         onUpdate={(summary) => onUpdate({ summary })}
       />
 
