@@ -172,11 +172,22 @@ const ResumeBuilder = () => {
 
               {/* Export PDF button */}
               <button
-                className="flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
+                onClick={handleExportPDF}
+                disabled={isExporting}
+                className="flex items-center space-x-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Export PDF"
               >
-                <Download className="w-4 h-4" />
-                <span className="hidden sm:inline">Export PDF</span>
+                {isExporting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span className="hidden sm:inline">Exporting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4" />
+                    <span className="hidden sm:inline">Export PDF</span>
+                  </>
+                )}
               </button>
             </div>
           </div>
