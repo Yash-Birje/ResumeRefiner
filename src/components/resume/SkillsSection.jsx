@@ -1,9 +1,16 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Code, Plus, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronUp, Code, Plus, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 import SkillCategory from './SkillCategory';
+import { suggestSkills } from '../../api/geminiService';
+import Modal from '../shared/Modal';
 
-const SkillsSection = ({ data = [], targetRole, onUpdate }) => {
+const SkillsSection = ({ data = [], targetRole, existingSkills, onUpdate }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [suggestedSkills, setSuggestedSkills] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [error, setError] = useState('');
 
   const handleAddCategory = () => {
     const newCategory = {
@@ -24,9 +31,68 @@ const SkillsSection = ({ data = [], targetRole, onUpdate }) => {
     onUpdate(data.filter((_, i) => i !== categoryIndex));
   };
 
-  const handleGetAISuggestions = () => {
-    // TODO: Implement AI skill suggestions
-    console.log('Get AI skill suggestions for role:', targetRole);
+  const handleGetAISuggestions = async () => {
+    setError('');
+    setIsGenerating(true);
+
+    try {
+      const result = await suggestSkills(targetRole, existingSkills);
+
+      if (result.success) {
+        setSuggestedSkills(result.skills);
+        setSelectedSkills(result.skills.map(() => true)); // Select all by default
+        setShowModal(true);
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('Failed to get skill suggestions. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleToggleSkill = (index) => {
+    const updated = [...selectedSkills];
+    updated[index] = !updated[index];
+    setSelectedSkills(updated);
+  };
+
+  const handleAddSelectedSkills = () => {
+    const skillsToAdd = suggestedSkills.filter((_, index) => selectedSkills[index]);
+
+    if (skillsToAdd.length === 0) {
+      setShowModal(false);
+      return;
+    }
+
+    // Find or create "AI Suggested" category
+    const aiCategoryIndex = data.findIndex(cat => cat.category === 'AI Suggested');
+
+    if (aiCategoryIndex >= 0) {
+      // Add to existing category
+      const updated = [...data];
+      const existingItems = updated[aiCategoryIndex].items || [];
+      updated[aiCategoryIndex].items = [...existingItems, ...skillsToAdd];
+      onUpdate(updated);
+    } else {
+      // Create new category
+      const newCategory = {
+        category: 'AI Suggested',
+        items: skillsToAdd
+      };
+      onUpdate([...data, newCategory]);
+    }
+
+    setShowModal(false);
+    setSuggestedSkills([]);
+    setSelectedSkills([]);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSuggestedSkills([]);
+    setSelectedSkills([]);
   };
 
   return (
