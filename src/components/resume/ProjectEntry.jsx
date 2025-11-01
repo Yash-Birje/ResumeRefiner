@@ -295,11 +295,15 @@ const ProjectEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
                   <div className="flex flex-col space-y-1">
                     <button
                       onClick={() => handleImproveHighlight(highlightIndex)}
-                      disabled={!highlight.trim() || !targetRole}
+                      disabled={!highlight.trim() || !targetRole || improvingHighlight === highlightIndex}
                       className="p-2 text-primary hover:bg-primary/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       title="Improve with AI"
                     >
-                      <Sparkles className="w-4 h-4" />
+                      {improvingHighlight === highlightIndex ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-4 h-4" />
+                      )}
                     </button>
 
                     {data.highlights.length > 1 && (
