@@ -1,12 +1,20 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, Trash2, Plus, X, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronUp, Trash2, Plus, X, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 import { validateURL } from '../../utils/validation';
 import { VALIDATION_RULES } from '../../utils/constants';
+import { improveBullet } from '../../api/geminiService';
+import Modal from '../shared/Modal';
 
 const ProjectEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
   const [isExpanded, setIsExpanded] = useState(index === 0);
   const [errors, setErrors] = useState({});
   const [newTech, setNewTech] = useState('');
+  const [improvingHighlight, setImprovingHighlight] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [originalHighlight, setOriginalHighlight] = useState('');
+  const [improvedHighlight, setImprovedHighlight] = useState('');
+  const [currentHighlightIndex, setCurrentHighlightIndex] = useState(null);
+  const [error, setError] = useState('');
 
   const handleChange = (field, value) => {
     onUpdate({ [field]: value });
