@@ -1,9 +1,16 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronUp, FileText, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronUp, FileText, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 import { VALIDATION_RULES } from '../../utils/constants';
+import { generateSummary } from '../../api/geminiService';
+import Modal from '../shared/Modal';
 
-const SummarySection = ({ data, targetRole, onUpdate }) => {
+const SummarySection = ({ data, targetRole, personalInfo, experience, education, onUpdate }) => {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [generatedSummary, setGeneratedSummary] = useState('');
+  const [error, setError] = useState('');
+
   const charCount = data?.length || 0;
   const maxChars = VALIDATION_RULES.SUMMARY.max;
 
@@ -13,9 +20,40 @@ const SummarySection = ({ data, targetRole, onUpdate }) => {
     }
   };
 
-  const handleGenerateAI = () => {
-    // TODO: Implement AI generation
-    console.log('Generate AI summary for role:', targetRole);
+  const handleGenerateAI = async () => {
+    setError('');
+    setIsGenerating(true);
+
+    try {
+      const result = await generateSummary(personalInfo, experience, education, targetRole);
+
+      if (result.success) {
+        setGeneratedSummary(result.summary);
+        setShowModal(true);
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('Failed to generate summary. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleUseSummary = () => {
+    onUpdate(generatedSummary);
+    setShowModal(false);
+    setGeneratedSummary('');
+  };
+
+  const handleRegenerate = async () => {
+    setShowModal(false);
+    await handleGenerateAI();
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setGeneratedSummary('');
   };
 
   return (
