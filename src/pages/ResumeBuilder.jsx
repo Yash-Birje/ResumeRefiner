@@ -46,6 +46,40 @@ const ResumeBuilder = () => {
     }
   };
 
+  // Handle PDF export
+  const handleExportPDF = async () => {
+    if (!previewRef.current) {
+      setExportError('Preview not ready for export');
+      return;
+    }
+
+    setIsExporting(true);
+    setExportError('');
+
+    try {
+      // Get the actual resume element from the preview
+      const resumeElement = previewRef.current.querySelector('[data-resume-content]');
+
+      if (!resumeElement) {
+        setExportError('Resume content not found');
+        setIsExporting(false);
+        return;
+      }
+
+      const filename = generatePDFFilename(currentResume);
+      const result = await exportToPDF(resumeElement, filename);
+
+      if (!result.success) {
+        setExportError(result.error);
+      }
+    } catch (error) {
+      console.error('Export error:', error);
+      setExportError('Failed to export PDF');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
