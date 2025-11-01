@@ -333,6 +333,54 @@ const ProjectEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
           </div>
         </div>
       )}
+
+      {/* AI Improved Highlight Modal */}
+      <Modal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        title="AI-Improved Highlight"
+        size="lg"
+      >
+        <div className="space-y-4">
+          {/* Improved Version */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">Improved Version:</h3>
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-sm text-gray-800 leading-relaxed">{improvedHighlight}</p>
+            </div>
+          </div>
+
+          {/* Original Version */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">Original Version:</h3>
+            <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+              <p className="text-sm text-gray-800 leading-relaxed">{originalHighlight}</p>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end space-x-3 pt-4 border-t">
+            <button
+              onClick={handleCloseModal}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Keep Original
+            </button>
+            <button
+              onClick={handleTryAgain}
+              className="px-4 py-2 text-sm font-medium text-primary bg-white border border-primary rounded-lg hover:bg-primary/10 transition-colors"
+            >
+              Try Again
+            </button>
+            <button
+              onClick={handleUseImproved}
+              className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark transition-colors"
+            >
+              Use Improved
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
