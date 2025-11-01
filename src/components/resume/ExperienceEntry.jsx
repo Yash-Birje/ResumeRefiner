@@ -262,6 +262,14 @@ const ExperienceEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
               Achievements & Responsibilities
             </label>
 
+            {/* Error Message */}
+            {error && (
+              <div className="mb-3 flex items-start space-x-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-red-700">{error}</p>
+              </div>
+            )}
+
             <div className="space-y-2">
               {data.description?.map((bullet, bulletIndex) => (
                 <div key={bulletIndex} className="flex items-start space-x-2">
