@@ -284,11 +284,15 @@ const ExperienceEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
                   <div className="flex flex-col space-y-1">
                     <button
                       onClick={() => handleImproveBullet(bulletIndex)}
-                      disabled={!bullet.trim() || !targetRole}
+                      disabled={!bullet.trim() || !targetRole || improvingBullet === bulletIndex}
                       className="p-2 text-primary hover:bg-primary/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       title="Improve with AI"
                     >
-                      <Sparkles className="w-4 h-4" />
+                      {improvingBullet === bulletIndex ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Sparkles className="w-4 h-4" />
+                      )}
                     </button>
 
                     {data.description.length > 1 && (
