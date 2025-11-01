@@ -79,7 +79,11 @@ const ResumePreview = ({ resume }) => {
           }}
         >
           {/* A4 sized container */}
-          <div className="bg-white shadow-lg" style={{ width: '210mm', minHeight: '297mm' }}>
+          <div
+            className="bg-white shadow-lg"
+            style={{ width: '210mm', minHeight: '297mm' }}
+            data-resume-content
+          >
             {getTemplateComponent()}
           </div>
         </div>
