@@ -71,9 +71,48 @@ const ExperienceEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
     }
   };
 
-  const handleImproveBullet = (bulletIndex) => {
-    // TODO: Implement AI bullet improvement
-    console.log('Improve bullet:', bulletIndex, 'for role:', targetRole);
+  const handleImproveBullet = async (bulletIndex) => {
+    const bulletText = data.description[bulletIndex];
+    if (!bulletText.trim()) return;
+
+    setError('');
+    setImprovingBullet(bulletIndex);
+    setCurrentBulletIndex(bulletIndex);
+    setOriginalBullet(bulletText);
+
+    try {
+      const result = await improveBullet(bulletText, data.position, targetRole);
+
+      if (result.success) {
+        setImprovedBullet(result.improvedBullet);
+        setShowModal(true);
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('Failed to improve bullet. Please try again.');
+    } finally {
+      setImprovingBullet(null);
+    }
+  };
+
+  const handleUseImproved = () => {
+    const updated = [...data.description];
+    updated[currentBulletIndex] = improvedBullet;
+    onUpdate({ description: updated });
+    handleCloseModal();
+  };
+
+  const handleTryAgain = async () => {
+    setShowModal(false);
+    await handleImproveBullet(currentBulletIndex);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setOriginalBullet('');
+    setImprovedBullet('');
+    setCurrentBulletIndex(null);
   };
 
   const getHeaderText = () => {
