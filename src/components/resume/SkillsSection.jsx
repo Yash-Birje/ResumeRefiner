@@ -118,15 +118,32 @@ const SkillsSection = ({ data = [], targetRole, existingSkills, onUpdate }) => {
       {/* Section Content */}
       {isExpanded && (
         <div className="p-4 border-t border-gray-200 space-y-4">
+          {/* Error Message */}
+          {error && (
+            <div className="flex items-start space-x-2 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-red-700">{error}</p>
+            </div>
+          )}
+
           {/* AI Suggestions Button */}
           <button
             onClick={handleGetAISuggestions}
-            disabled={!targetRole}
+            disabled={!targetRole || isGenerating}
             className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title={!targetRole ? 'Please set a target role first' : 'Get AI-powered skill suggestions'}
           >
-            <Sparkles className="w-5 h-5" />
-            <span className="font-medium">Get AI Skill Suggestions</span>
+            {isGenerating ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span className="font-medium">Generating...</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-5 h-5" />
+                <span className="font-medium">Get AI Skill Suggestions</span>
+              </>
+            )}
           </button>
 
           {/* Add Category Button */}
