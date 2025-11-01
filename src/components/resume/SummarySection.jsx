@@ -132,6 +132,56 @@ const SummarySection = ({ data, targetRole, personalInfo, experience, education,
           </div>
         </div>
       )}
+
+      {/* AI Generated Summary Modal */}
+      <Modal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        title="AI-Generated Summary"
+        size="lg"
+      >
+        <div className="space-y-4">
+          {/* Generated Summary */}
+          <div>
+            <h3 className="text-sm font-semibold text-gray-700 mb-2">Generated Summary:</h3>
+            <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+              <p className="text-sm text-gray-800 leading-relaxed">{generatedSummary}</p>
+            </div>
+          </div>
+
+          {/* Current Summary (if exists) */}
+          {data && data.trim() && (
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-2">Current Summary:</h3>
+              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                <p className="text-sm text-gray-800 leading-relaxed">{data}</p>
+              </div>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="flex items-center justify-end space-x-3 pt-4 border-t">
+            <button
+              onClick={handleCloseModal}
+              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleRegenerate}
+              className="px-4 py-2 text-sm font-medium text-primary bg-white border border-primary rounded-lg hover:bg-primary/10 transition-colors"
+            >
+              Regenerate
+            </button>
+            <button
+              onClick={handleUseSummary}
+              className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark transition-colors"
+            >
+              Use This Summary
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
