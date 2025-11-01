@@ -52,22 +52,22 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            {/* <Route
+            <Route
               path="/resume/:id/preview"
               element={
                 <ProtectedRoute>
-                  <ResumePreview />
+                  <ResumePreviewPage />
                 </ProtectedRoute>
               }
             />
             <Route
-              path="/analytics/:id"
+              path="/resume/:id/analytics"
               element={
                 <ProtectedRoute>
                   <AnalyticsPage />
                 </ProtectedRoute>
               }
-            /> */}
+            />
 
             {/* Catch-all redirect */}
             <Route path="*" element={<Navigate to="/" replace />} />
