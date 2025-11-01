@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { ArrowLeft, Save, Download, Eye } from 'lucide-react';
+import { ArrowLeft, Save, Download, Eye, Loader2 } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { useResume } from '../hooks/useResume';
 import { useAutoSave } from '../hooks/useAutoSave';
@@ -8,6 +8,7 @@ import Navbar from '../components/shared/Navbar';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import ResumeForm from '../components/resume/ResumeForm';
 import ResumePreview from '../components/resume/ResumePreview';
+import { exportToPDF, generatePDFFilename } from '../utils/pdfExporter';
 
 const ResumeBuilder = () => {
   const { id } = useParams();
@@ -15,6 +16,9 @@ const ResumeBuilder = () => {
   const { currentUser } = useAuth();
   const { currentResume, loadResume, updateCurrentResume, autoSave, loading } = useResume();
   const [activeTab, setActiveTab] = useState('edit'); // 'edit' or 'preview' for mobile
+  const [isExporting, setIsExporting] = useState(false);
+  const [exportError, setExportError] = useState('');
+  const previewRef = useRef(null);
 
   // Load resume on mount
   useEffect(() => {
