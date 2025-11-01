@@ -8,8 +8,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import ResumeBuilder from './pages/ResumeBuilder';
-// import ResumePreview from './pages/ResumePreview';
-// import AnalyticsPage from './pages/AnalyticsPage';
+import ResumePreviewPage from './pages/ResumePreviewPage';
+import AnalyticsPage from './pages/AnalyticsPage';
 
 // Import components
 import ProtectedRoute from './components/shared/ProtectedRoute';
