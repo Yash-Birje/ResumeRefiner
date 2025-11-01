@@ -167,6 +167,64 @@ const SkillsSection = ({ data = [], targetRole, existingSkills, onUpdate }) => {
           ))}
         </div>
       )}
+
+      {/* AI Skill Suggestions Modal */}
+      <Modal
+        isOpen={showModal}
+        onClose={handleCloseModal}
+        title="AI-Suggested Skills"
+        size="md"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-gray-600">
+            Select the skills you want to add to your resume:
+          </p>
+
+          {/* Skill Checkboxes */}
+          <div className="space-y-2 max-h-96 overflow-y-auto">
+            {suggestedSkills.map((skill, index) => (
+              <label
+                key={index}
+                className="flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedSkills[index]}
+                  onChange={() => handleToggleSkill(index)}
+                  className="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary"
+                />
+                <span className="text-sm text-gray-900">{skill}</span>
+              </label>
+            ))}
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center justify-between pt-4 border-t">
+            <button
+              onClick={() => setSelectedSkills(suggestedSkills.map(() => true))}
+              className="text-sm text-primary hover:underline"
+            >
+              Select All
+            </button>
+
+            <div className="flex items-center space-x-3">
+              <button
+                onClick={handleCloseModal}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddSelectedSkills}
+                disabled={selectedSkills.every(s => !s)}
+                className="px-4 py-2 text-sm font-medium text-white bg-primary rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Add Selected ({selectedSkills.filter(s => s).length})
+              </button>
+            </div>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };
