@@ -83,9 +83,48 @@ const ProjectEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
     }
   };
 
-  const handleImproveHighlight = (highlightIndex) => {
-    // TODO: Implement AI highlight improvement
-    console.log('Improve highlight:', highlightIndex, 'for role:', targetRole);
+  const handleImproveHighlight = async (highlightIndex) => {
+    const highlightText = data.highlights[highlightIndex];
+    if (!highlightText.trim()) return;
+
+    setError('');
+    setImprovingHighlight(highlightIndex);
+    setCurrentHighlightIndex(highlightIndex);
+    setOriginalHighlight(highlightText);
+
+    try {
+      const result = await improveBullet(highlightText, `${data.name} project`, targetRole);
+
+      if (result.success) {
+        setImprovedHighlight(result.improvedBullet);
+        setShowModal(true);
+      } else {
+        setError(result.error);
+      }
+    } catch (err) {
+      setError('Failed to improve highlight. Please try again.');
+    } finally {
+      setImprovingHighlight(null);
+    }
+  };
+
+  const handleUseImproved = () => {
+    const updated = [...data.highlights];
+    updated[currentHighlightIndex] = improvedHighlight;
+    onUpdate({ highlights: updated });
+    handleCloseModal();
+  };
+
+  const handleTryAgain = async () => {
+    setShowModal(false);
+    await handleImproveHighlight(currentHighlightIndex);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setOriginalHighlight('');
+    setImprovedHighlight('');
+    setCurrentHighlightIndex(null);
   };
 
   const getHeaderText = () => {
