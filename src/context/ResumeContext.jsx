@@ -54,29 +54,29 @@ export const ResumeProvider = ({ children }) => {
    * Load a specific resume by ID
    * @param {string} resumeId - Resume ID
    */
-  const loadResume = async (resumeId) => {
-    setLoading(true);
-    setError(null);
+  const loadResume = useCallback(async (id) => {
+  setLoading(true);
+  setError(null);
 
-    try {
-      const result = await resumeService.getResumeById(resumeId);
+  try {
+    const result = await resumeService.getResumeById(id);
 
-      if (result.success) {
-        setCurrentResume(result.resume);
-        return { success: true };
-      } else {
-        setError(result.error);
-        return { success: false, error: result.error };
-      }
-    } catch (err) {
-      const errorMessage = 'Failed to load resume';
-      setError(errorMessage);
-      console.error('Load resume error:', err);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
+    if (result.success) {
+      setCurrentResume(result.resume);
+      return { success: true };
+    } else {
+      setError(result.error);
+      return { success: false, error: result.error };
     }
-  };
+  } catch (err) {
+    const errorMessage = 'Failed to load resume';
+    setError(errorMessage);
+    console.error('Load resume error:', err);
+    return { success: false, error: errorMessage };
+  } finally {
+    setLoading(false);
+  }
+}, []);
 
   /**
    * Create a new resume
@@ -146,7 +146,7 @@ export const ResumeProvider = ({ children }) => {
    * Auto-save resume (no loading state)
    * @param {object} updates - Resume updates
    */
-  const autoSave = async (updates) => {
+  const autoSave = useCallback(async (updates) => {
     if (!currentResume) return;
 
     try {
@@ -163,7 +163,7 @@ export const ResumeProvider = ({ children }) => {
       console.error('Auto-save error:', err);
       // Silently fail for auto-save
     }
-  };
+  }, [currentResume]);
 
   /**
    * Delete a resume
@@ -228,11 +228,11 @@ export const ResumeProvider = ({ children }) => {
    * Update current resume fields directly (for form editing)
    * @param {object} updates - Fields to update
    */
-  const updateCurrentResume = (updates) => {
+  const updateCurrentResume = useCallback((updates) => {
     if (currentResume) {
       setCurrentResume(prev => ({ ...prev, ...updates }));
     }
-  };
+  }, [currentResume]);
 
   /**
    * Clear error

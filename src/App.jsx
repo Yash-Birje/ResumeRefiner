@@ -16,8 +16,9 @@ import ProtectedRoute from './components/shared/ProtectedRoute';
 
 function App() {
   return (
+    <AuthProvider>
     <BrowserRouter>
-      <AuthProvider>
+      
         <ResumeProvider>
           <Routes>
             {/* Public Routes */}
@@ -73,8 +74,9 @@ function App() {
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </ResumeProvider>
-      </AuthProvider>
+      
     </BrowserRouter>
+    </AuthProvider>
   );
 }
 
