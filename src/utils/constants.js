@@ -108,6 +108,11 @@ export const ANALYTICS_THRESHOLDS = {
     LOW: 0.3,
     IDEAL: 0.5,
     HIGH: 1
+  },
+  IMPACT_WORD_PERCENTAGE: {
+    LOW: 40,
+    MEDIUM: 70,
+    HIGH: 100
   }
 };
 

@@ -73,7 +73,7 @@ const ResumeCard = ({ resume, onDelete, onDuplicate }) => {
   };
 
   const handleAnalytics = () => {
-    navigate(`/analytics/${resume.id}`);
+    navigate(`/resume/${resume.id}/analytics`);
   };
 
   const handlePreview = () => {

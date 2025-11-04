@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
-import ModernTemplate from '../templates/ModernTemplate';
-import ClassicTemplate from '../templates/ClassicTemplate';
+import ModernTemplate from '../templates/ModernTemplate.jsx';
+import ClassicTemplate from '../templates/ClassicTemplate.jsx';
 import MinimalistTemplate from '../templates/MinimalistTemplate';
 
 const ResumePreview = ({ resume }) => {

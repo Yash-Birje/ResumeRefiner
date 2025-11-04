@@ -347,6 +347,7 @@ export const calculateSectionCompleteness = (resume) => {
  * Calculate comprehensive analytics for a resume
  */
 export const calculateResumeAnalytics = (resume) => {
+  console.log('Calculating analytics for resume:', resume);
   if (!resume) {
     return {
       wordCount: 0,
