@@ -10,6 +10,18 @@ import ResumeForm from '../components/resume/ResumeForm';
 import ResumePreview from '../components/resume/ResumePreview';
 import { exportToPDF, generatePDFFilename } from '../utils/pdfExporter';
 
+// Template imports
+const templateOptions = [
+  { value: 'modern', label: 'Modern' },
+  { value: 'classic', label: 'Classic' },
+  { value: 'minimalist', label: 'Minimalist' },
+  { value: 'creative', label: 'Creative' },
+  { value: 'executive', label: 'Executive' },
+  { value: 'ats', label: 'ATS Optimized' },
+  { value: 'infographic', label: 'Infographic' },
+  { value: 'startup', label: 'Startup' }
+];
+
 const ResumeBuilder = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -156,9 +168,11 @@ const ResumeBuilder = () => {
                 onChange={(e) => handleUpdateResume({ template: e.target.value })}
                 className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
               >
-                <option value="modern">Modern</option>
-                <option value="classic">Classic</option>
-                <option value="minimalist">Minimalist</option>
+                {templateOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </select>
 
               {/* Preview button (desktop) */}

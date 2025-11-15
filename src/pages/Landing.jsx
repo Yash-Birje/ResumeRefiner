@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { FileText, Sparkles, BarChart3, Download, ArrowRight, CheckCircle, Zap } from 'lucide-react';
+import Resume3D from '../components/shared/Resume3D';
 
 const Landing = () => {
   return (
@@ -206,15 +207,7 @@ const Landing = () => {
 
           {/* Screenshot with 3D effect */}
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500 to-purple-600 rounded-2xl blur-2xl opacity-40 group-hover:opacity-60 transition-opacity"></div>
-            <div className="relative rounded-2xl overflow-hidden shadow-2xl transform group-hover:scale-105 transition-transform duration-300">
-              <img
-                src="https://images.unsplash.com/photo-1516321318423-f06f70504c11?w=600&h=500&fit=crop"
-                alt="Resume Builder Screenshot"
-                className="w-full h-96 object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
-            </div>
+            <Resume3D />
           </div>
         </div>
       </section>
