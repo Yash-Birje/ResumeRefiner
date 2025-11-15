@@ -292,10 +292,9 @@ const ProjectEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
                     placeholder="Describe a key achievement or feature..."
                   />
 
-                  <div className="flex flex-col space-y-1">
+                  {/* <div className="flex flex-col space-y-1">
                     <button
                       onClick={() => handleImproveHighlight(highlightIndex)}
-                      disabled={!highlight.trim() || !targetRole || improvingHighlight === highlightIndex}
                       className="p-2 text-primary hover:bg-primary/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       title="Improve with AI"
                     >
@@ -315,7 +314,7 @@ const ProjectEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
                         <X className="w-4 h-4" />
                       </button>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>

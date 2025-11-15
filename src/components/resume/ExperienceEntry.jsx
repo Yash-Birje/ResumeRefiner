@@ -281,10 +281,9 @@ const ExperienceEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
                     placeholder="Describe your achievement or responsibility..."
                   />
 
-                  <div className="flex flex-col space-y-1">
+                  {/* <div className="flex flex-col space-y-1">
                     <button
                       onClick={() => handleImproveBullet(bulletIndex)}
-                      disabled={!bullet.trim() || !targetRole || improvingBullet === bulletIndex}
                       className="p-2 text-primary hover:bg-primary/10 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       title="Improve with AI"
                     >
@@ -304,7 +303,7 @@ const ExperienceEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
                         <X className="w-4 h-4" />
                       </button>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>

@@ -240,7 +240,7 @@ export const suggestSkills = async (targetRole, existingSkills = []) => {
 
     const genResult = await requestWithRetry(
       ({ signal }) => model.generateContent(prompt, { signal }),
-      { retries: 3, baseDelay: 600, timeoutMs: 10000, onRetry: (a, e) => console.warn('suggestSkills retry', a, e?.message || e) }
+      { retries: 4, baseDelay: 600, timeoutMs: 12000, onRetry: (a, e) => console.warn('generateSummary retry', a, e?.message || e) }
     );
 
     const text = extractTextFromResult(genResult);
@@ -284,7 +284,7 @@ export const generateSummary = async (personalInfo, experience, education, targe
     const prompt = `Write a professional resume summary (3-4 sentences) for a ${targetRole} with the following background:\n` +
       `${experienceContext ? `Experience:\n${experienceContext}\n` : ''}` +
       `${educationContext ? `Education:\n${educationContext}\n` : ''}` +
-      `The summary should:\n- Highlight years of experience and key expertise\n- Emphasize relevant achievements and strengths\n- Target the ${targetRole} position\n- Be concise and impactful (max 100 words)\n- Use strong action verbs\n- Sound professional and confident\n`;
+      `The summary should:\n- Highlight years of experience and key expertise\n- Emphasize relevant achievements and strengths\n- Target the ${targetRole} position\n- Be concise and impactful (max 500 characters)\n- Use strong action verbs\n- Sound professional and confident\n`;
 
     const genResult = await requestWithRetry(
       ({ signal }) => model.generateContent(prompt, { signal }),
@@ -322,14 +322,14 @@ export const improveBullet = async (bulletText, position, targetRole) => {
 
     const genResult = await requestWithRetry(
       ({ signal }) => model.generateContent(prompt, { signal }),
-      { retries: 3, baseDelay: 500, timeoutMs: 10000, onRetry: (a, e) => console.warn('improveBullet retry', a, e?.message || e) }
+      { retries: 4, baseDelay: 600, timeoutMs: 12000, onRetry: (a, e) => console.warn('improveBullet retry', a, e?.message || e) }
     );
 
     const text = extractTextFromResult(genResult);
-    const cleanText = text.replace(/^['"]|['"]$/g, '').trim();
-    if (!cleanText || cleanText.length < 10) return { success: false, error: ERROR_MESSAGES.AI.INVALID_RESPONSE };
+    // const cleanText = text.replace(/^['"]|['"]$/g, '').trim();
+    if (!text || text.length < 10) return { success: false, error: ERROR_MESSAGES.AI.INVALID_RESPONSE };
 
-    return { success: true, improvedText: cleanText };
+    return { success: true, improvedText: text };
   } catch (err) {
     console.error('Error improving bullet point:', err);
 

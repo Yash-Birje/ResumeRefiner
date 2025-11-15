@@ -338,10 +338,10 @@ export const validateGPA = (gpa, required = false) => {
     };
   }
 
-  if (gpaNum < 0 || gpaNum > 4.0) {
+  if (gpaNum < 0 || gpaNum > 10.0) {
     return {
       isValid: false,
-      error: 'GPA must be between 0.0 and 4.0'
+      error: 'GPA must be between 0.0 and 10.0'
     };
   }
 
