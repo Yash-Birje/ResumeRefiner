@@ -8,6 +8,25 @@ const ResumeCard = ({ resume, onDelete, onDuplicate }) => {
   const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [tiltTransform, setTiltTransform] = useState('perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)');
+
+  // Tilt handlers for 3D effect
+  const handleMouseMove = (e) => {
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const maxDeg = 8;
+    const rotateY = ((x - cx) / cx) * maxDeg;
+    const rotateX = -((y - cy) / cy) * maxDeg;
+    setTiltTransform(`perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`);
+  };
+
+  const handleMouseLeave = () => {
+    setTiltTransform('perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)');
+  };
 
   // Calculate completion percentage (simple calculation)
   const calculateCompletion = () => {
@@ -62,9 +81,28 @@ const ResumeCard = ({ resume, onDelete, onDuplicate }) => {
     const colors = {
       modern: 'bg-blue-100 text-blue-800',
       classic: 'bg-purple-100 text-purple-800',
-      minimalist: 'bg-gray-100 text-gray-800'
+      minimalist: 'bg-gray-100 text-gray-800',
+      creative: 'bg-pink-100 text-pink-800',
+      executive: 'bg-slate-100 text-slate-800',
+      ats: 'bg-green-100 text-green-800',
+      infographic: 'bg-indigo-100 text-indigo-800',
+      startup: 'bg-teal-100 text-teal-800'
     };
     return colors[resume.template] || colors.modern;
+  };
+
+  const getTemplateDisplayName = () => {
+    const names = {
+      modern: 'Modern',
+      classic: 'Classic',
+      minimalist: 'Minimalist',
+      creative: 'Creative',
+      executive: 'Executive',
+      ats: 'ATS Optimized',
+      infographic: 'Infographic',
+      startup: 'Startup'
+    };
+    return names[resume.template] || 'Modern';
   };
 
   // Handle actions
@@ -100,7 +138,13 @@ const ResumeCard = ({ resume, onDelete, onDuplicate }) => {
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden">
+      <div className="relative" style={{ perspective: '1000px' }}>
+        <div
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseLeave}
+          style={{ transform: tiltTransform, transition: 'transform 200ms ease', willChange: 'transform' }}
+          className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow overflow-hidden transform-gpu"
+        >
         {/* Card Header */}
         <div className="p-6">
           {/* Title and Menu */}
@@ -156,7 +200,7 @@ const ResumeCard = ({ resume, onDelete, onDuplicate }) => {
           {/* Template Badge */}
           <div className="mb-4">
             <span className={`inline-block px-2 py-1 text-xs font-medium rounded ${getTemplateBadgeColor()}`}>
-              {resume.template ? resume.template.charAt(0).toUpperCase() + resume.template.slice(1) : 'Modern'}
+              {getTemplateDisplayName()}
             </span>
           </div>
 
@@ -214,6 +258,7 @@ const ResumeCard = ({ resume, onDelete, onDuplicate }) => {
             <span>Preview</span>
           </button>
         </div>
+      </div>
       </div>
 
       {/* Delete Confirmation Modal */}

@@ -3,6 +3,11 @@ import { ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
 import ModernTemplate from '../templates/ModernTemplate.jsx';
 import ClassicTemplate from '../templates/ClassicTemplate.jsx';
 import MinimalistTemplate from '../templates/MinimalistTemplate';
+import CreativeTemplate from '../templates/CreativeTemplate.jsx';
+import ExecutiveTemplate from '../templates/ExecutiveTemplate.jsx';
+import ATSTemplate from '../templates/ATSTemplate.jsx';
+import InfographicTemplate from '../templates/InfographicTemplate.jsx';
+import StartupTemplate from '../templates/StartupTemplate.jsx';
 
 const ResumePreview = ({ resume }) => {
   const [zoom, setZoom] = useState(100);
@@ -13,6 +18,16 @@ const ResumePreview = ({ resume }) => {
         return <ClassicTemplate resume={resume} />;
       case 'minimalist':
         return <MinimalistTemplate resume={resume} />;
+      case 'creative':
+        return <CreativeTemplate resume={resume} />;
+      case 'executive':
+        return <ExecutiveTemplate resume={resume} />;
+      case 'ats':
+        return <ATSTemplate resume={resume} />;
+      case 'infographic':
+        return <InfographicTemplate resume={resume} />;
+      case 'startup':
+        return <StartupTemplate resume={resume} />;
       case 'modern':
       default:
         return <ModernTemplate resume={resume} />;
