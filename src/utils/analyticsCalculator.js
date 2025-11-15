@@ -1,9 +1,34 @@
 import { ACTION_VERBS, IMPACT_WORDS, ANALYTICS_THRESHOLDS } from './constants';
 
+// small helper: safe number from possibly-undefined thresholds
+const safeThreshold = (val, fallback) => (typeof val === 'number' ? val : fallback);
+
+// normalize thresholds from ANALYTICS_THRESHOLDS which uses LOW/MEDIUM/HIGH
+const getThresholds = (ANALYTICS_THRESHOLDS) => {
+  return {
+    actionVerb: {
+      good: safeThreshold(ANALYTICS_THRESHOLDS.ACTION_VERB_PERCENTAGE?.HIGH, 100),
+      acceptable: safeThreshold(ANALYTICS_THRESHOLDS.ACTION_VERB_PERCENTAGE?.MEDIUM, 85)
+    },
+    quantifiable: {
+      good: safeThreshold(ANALYTICS_THRESHOLDS.QUANTIFIABLE_PERCENTAGE?.HIGH, 100),
+      acceptable: safeThreshold(ANALYTICS_THRESHOLDS.QUANTIFIABLE_PERCENTAGE?.MEDIUM, 60)
+    },
+    impact: {
+      good: safeThreshold(ANALYTICS_THRESHOLDS.IMPACT_WORD_PERCENTAGE?.HIGH, 100),
+      acceptable: safeThreshold(ANALYTICS_THRESHOLDS.IMPACT_WORD_PERCENTAGE?.MEDIUM, 70)
+    }
+  };
+};
+
+
 /**
  * Calculate word count for text content
  */
 export const calculateWordCount = (text) => {
+  // console.log('Calculating word count for text:', text);
+  // console.log('Calculating word count for text:', text.trim().split(/\s+/).filter(word => word.length > 0).length);
+
   if (!text || typeof text !== 'string') return 0;
   return text.trim().split(/\s+/).filter(word => word.length > 0).length;
 };
@@ -13,7 +38,6 @@ export const calculateWordCount = (text) => {
  */
 export const calculateTotalWordCount = (resume) => {
   let total = 0;
-
   // Summary
   if (resume.summary) {
     total += calculateWordCount(resume.summary);
@@ -52,7 +76,8 @@ export const calculateTotalWordCount = (resume) => {
       }
     });
   }
-
+  
+  // console.log('Resume data in word count calculation:', total);
   return total;
 };
 
@@ -346,8 +371,10 @@ export const calculateSectionCompleteness = (resume) => {
 /**
  * Calculate comprehensive analytics for a resume
  */
-export const calculateResumeAnalytics = (resume) => {
-  console.log('Calculating analytics for resume:', resume);
+export const calculateResumeAnalytics = async (resume) => {
+  const resumeData = await Promise.resolve(resume);
+  // Ensure we have the latest resume data
+  // console.log('Calculating analytics for resume:', resumeData,resumeData.resume);
   if (!resume) {
     return {
       wordCount: 0,
@@ -359,12 +386,12 @@ export const calculateResumeAnalytics = (resume) => {
     };
   }
 
-  const wordCount = calculateTotalWordCount(resume);
-  const actionVerbs = calculateActionVerbUsage(resume);
-  const quantifiable = calculateQuantifiableAchievements(resume);
-  const impactWords = calculateImpactWordUsage(resume);
-  const completeness = calculateSectionCompleteness(resume);
-
+  const wordCount = calculateTotalWordCount(resumeData.resume);
+  const actionVerbs = calculateActionVerbUsage(resumeData.resume);
+  const quantifiable = calculateQuantifiableAchievements(resumeData.resume);
+  const impactWords = calculateImpactWordUsage(resumeData.resume);
+  const completeness = calculateSectionCompleteness(resumeData.resume);
+  // console.log('analyzed resume data:', {wordCount, actionVerbs, quantifiable, impactWords, completeness});
   // Calculate overall score (0-100)
   let score = 0;
 
@@ -372,32 +399,32 @@ export const calculateResumeAnalytics = (resume) => {
   score += (completeness.overall.percentage * 0.4);
 
   // Action verbs: 20 points
-  if (actionVerbs.percentage >= ANALYTICS_THRESHOLDS.ACTION_VERB_PERCENTAGE.good) {
+  if (actionVerbs.percentage >= ANALYTICS_THRESHOLDS.ACTION_VERB_PERCENTAGE.HIGH) {
     score += 20;
-  } else if (actionVerbs.percentage >= ANALYTICS_THRESHOLDS.ACTION_VERB_PERCENTAGE.acceptable) {
+  } else if (actionVerbs.percentage >= ANALYTICS_THRESHOLDS.ACTION_VERB_PERCENTAGE.MEDIUM && actionVerbs.percentage < ANALYTICS_THRESHOLDS.ACTION_VERB_PERCENTAGE.HIGH) {
     score += 15;
   } else {
-    score += (actionVerbs.percentage / ANALYTICS_THRESHOLDS.ACTION_VERB_PERCENTAGE.acceptable) * 15;
+    score += (actionVerbs.percentage / ANALYTICS_THRESHOLDS.ACTION_VERB_PERCENTAGE.LOW) * 15;
   }
 
   // Quantifiable achievements: 20 points
-  if (quantifiable.percentage >= ANALYTICS_THRESHOLDS.QUANTIFIABLE_PERCENTAGE.good) {
+  if (quantifiable.percentage >= ANALYTICS_THRESHOLDS.QUANTIFIABLE_PERCENTAGE.HIGH) {
     score += 20;
-  } else if (quantifiable.percentage >= ANALYTICS_THRESHOLDS.QUANTIFIABLE_PERCENTAGE.acceptable) {
+  } else if (quantifiable.percentage >= ANALYTICS_THRESHOLDS.QUANTIFIABLE_PERCENTAGE.MEDIUM && quantifiable.percentage < ANALYTICS_THRESHOLDS.QUANTIFIABLE_PERCENTAGE.HIGH) {
     score += 15;
   } else {
-    score += (quantifiable.percentage / ANALYTICS_THRESHOLDS.QUANTIFIABLE_PERCENTAGE.acceptable) * 15;
+    score += (quantifiable.percentage / ANALYTICS_THRESHOLDS.QUANTIFIABLE_PERCENTAGE.LOW) * 15;
   }
 
   // Impact words: 20 points
-  if (impactWords.percentage >= ANALYTICS_THRESHOLDS.IMPACT_WORD_PERCENTAGE.good) {
+  if (impactWords.percentage >= ANALYTICS_THRESHOLDS.IMPACT_WORD_PERCENTAGE.HIGH) {
     score += 20;
-  } else if (impactWords.percentage >= ANALYTICS_THRESHOLDS.IMPACT_WORD_PERCENTAGE.acceptable) {
+  } else if (impactWords.percentage >= ANALYTICS_THRESHOLDS.IMPACT_WORD_PERCENTAGE.MEDIUM && impactWords.percentage < ANALYTICS_THRESHOLDS.IMPACT_WORD_PERCENTAGE.HIGH) {
     score += 15;
   } else {
-    score += (impactWords.percentage / ANALYTICS_THRESHOLDS.IMPACT_WORD_PERCENTAGE.acceptable) * 15;
+    score += (impactWords.percentage / ANALYTICS_THRESHOLDS.IMPACT_WORD_PERCENTAGE.LOW) * 15;
   }
-
+  // console.log('Final calculated analytics score:', score);
   return {
     wordCount,
     actionVerbs,

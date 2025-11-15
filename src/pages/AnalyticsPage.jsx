@@ -42,12 +42,12 @@ const AnalyticsPage = () => {
     }
   }, [id]);
 
-  const loadAnalytics = () => {
+  const loadAnalytics = async () => {
     setLoading(true);
     setError('');
 
-    const result = getResumeAnalytics(id);
-
+    const result = await getResumeAnalytics(id);
+    // console.log('Analytics fetch result:', Promise.resolve(result));
     if (result.success) {
       setAnalyticsData(result);
     } else {

@@ -6,10 +6,10 @@ import { getResumeById } from './resumeService';
  * @param {string} resumeId - Resume ID
  * @returns {Object} Analytics data
  */
-export const getResumeAnalytics = (resumeId) => {
+export const getResumeAnalytics = async (resumeId) => {
   try {
     const resume = getResumeById(resumeId);
-
+    // console.log('Fetched resume for analytics:', resume);
     if (!resume) {
       return {
         success: false,
@@ -17,8 +17,8 @@ export const getResumeAnalytics = (resumeId) => {
       };
     }
 
-    const analytics = calculateResumeAnalytics(resume);
-
+    const analytics = await calculateResumeAnalytics(resume);
+    // console.log('Calculated analytics for resume:', analytics);
     return {
       success: true,
       resumeId,
@@ -44,7 +44,7 @@ export const getAnalyticsSuggestions = (analytics) => {
   const suggestions = [];
 
   if (!analytics) return suggestions;
-
+  // console.log('Generating suggestions based on analytics:', analytics);
   // Check action verb usage
   if (analytics.actionVerbs.percentage < 70) {
     suggestions.push({

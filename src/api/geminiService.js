@@ -308,37 +308,37 @@ export const generateSummary = async (personalInfo, experience, education, targe
   }
 };
 
-export const improveBullet = async (bulletText, position, targetRole) => {
-  if (!apiKey) return { success: false, error: 'AI service not configured. Please add your Gemini API key to the .env file.' };
-  if (!bulletText || !bulletText.trim()) return { success: false, error: 'Bullet point text is required' };
-  if (!checkRateLimit()) return { success: false, error: ERROR_MESSAGES.AI.RATE_LIMIT };
+// export const improveBullet = async (bulletText, position, targetRole) => {
+//   if (!apiKey) return { success: false, error: 'AI service not configured. Please add your Gemini API key to the .env file.' };
+//   if (!bulletText || !bulletText.trim()) return { success: false, error: 'Bullet point text is required' };
+//   if (!checkRateLimit()) return { success: false, error: ERROR_MESSAGES.AI.RATE_LIMIT };
 
-  try {
-    await ensureModel();
+//   try {
+//     await ensureModel();
 
-    const prompt = `Improve this resume bullet point for a ${position || 'professional'} targeting a ${targetRole || 'similar'} role:\n\n` +
-      `Original: "${bulletText}"\n\n` +
-      `Make it more impactful by:\n- Starting with a strong action verb\n- Adding quantifiable metrics if implied (use realistic estimates like percentages, numbers, timeframes)\n- Highlighting the impact/result\n- Keeping it concise (max 150 characters)\n- Making it ATS-friendly with relevant keywords\n- Using professional language\n\nReturn ONLY the improved bullet point, no explanation, quotation marks, or additional text.`;
+//     const prompt = `Improve this resume bullet point for a ${position || 'professional'} targeting a ${targetRole || 'similar'} role:\n\n` +
+//       `Original: "${bulletText}"\n\n` +
+//       `Make it more impactful by:\n- Starting with a strong action verb\n- Adding quantifiable metrics if implied (use realistic estimates like percentages, numbers, timeframes)\n- Highlighting the impact/result\n- Keeping it concise (max 150 characters)\n- Making it ATS-friendly with relevant keywords\n- Using professional language\n\nReturn ONLY the improved bullet point, no explanation, quotation marks, or additional text.`;
 
-    const genResult = await requestWithRetry(
-      ({ signal }) => model.generateContent(prompt, { signal }),
-      { retries: 4, baseDelay: 600, timeoutMs: 12000, onRetry: (a, e) => console.warn('improveBullet retry', a, e?.message || e) }
-    );
+//     const genResult = await requestWithRetry(
+//       ({ signal }) => model.generateContent(prompt, { signal }),
+//       { retries: 4, baseDelay: 600, timeoutMs: 12000, onRetry: (a, e) => console.warn('improveBullet retry', a, e?.message || e) }
+//     );
 
-    const text = extractTextFromResult(genResult);
-    // const cleanText = text.replace(/^['"]|['"]$/g, '').trim();
-    if (!text || text.length < 10) return { success: false, error: ERROR_MESSAGES.AI.INVALID_RESPONSE };
+//     const text = extractTextFromResult(genResult);
+//     // const cleanText = text.replace(/^['"]|['"]$/g, '').trim();
+//     if (!text || text.length < 10) return { success: false, error: ERROR_MESSAGES.AI.INVALID_RESPONSE };
 
-    return { success: true, improvedText: text };
-  } catch (err) {
-    console.error('Error improving bullet point:', err);
+//     return { success: true, improvedText: text };
+//   } catch (err) {
+//     console.error('Error improving bullet point:', err);
 
-    const msg = String(err?.message || err);
-    if (/404|not found/i.test(msg)) return { success: false, error: 'Requested model not found for your account/API version.' };
-    if (/503|overload|temporar/i.test(msg)) return { success: false, error: 'Model is busy. Please try again later.' };
+//     const msg = String(err?.message || err);
+//     if (/404|not found/i.test(msg)) return { success: false, error: 'Requested model not found for your account/API version.' };
+//     if (/503|overload|temporar/i.test(msg)) return { success: false, error: 'Model is busy. Please try again later.' };
 
-    return { success: false, error: ERROR_MESSAGES.AI.FAILED };
-  }
-};
+//     return { success: false, error: ERROR_MESSAGES.AI.FAILED };
+//   }
+// };
 
 export const isAIConfigured = () => !!apiKey && !!genAI;

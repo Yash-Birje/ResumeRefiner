@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { ChevronDown, ChevronUp, Trash2, Plus, X, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
 import { validateURL } from '../../utils/validation';
 import { VALIDATION_RULES } from '../../utils/constants';
-import { improveBullet } from '../../api/geminiService';
+// import { improveBullet } from '../../api/geminiService';
 import Modal from '../shared/Modal';
 
 const ProjectEntry = ({ data, index, targetRole, onUpdate, onDelete }) => {
