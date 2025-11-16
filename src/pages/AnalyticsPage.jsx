@@ -28,6 +28,7 @@ import {
 import Navbar from '../components/shared/Navbar';
 import LoadingSpinner from '../components/shared/LoadingSpinner';
 import { getResumeAnalytics, getAnalyticsSuggestions, getScoreRating, exportAnalyticsData } from '../api/analyticsService';
+import { jsonToPdfBrowser } from '../utils/pdfExporter';
 
 const AnalyticsPage = () => {
   const { id } = useParams();
@@ -58,14 +59,17 @@ const AnalyticsPage = () => {
   };
 
   const handleDownloadReport = () => {
-    const dataStr = exportAnalyticsData(analyticsData);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `resume-analytics-${id}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
+    // const dataStr = exportAnalyticsData(analyticsData);
+    // const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    // const url = URL.createObjectURL(dataBlob);
+    // const link = document.createElement('a');
+    // link.href = url;
+    // link.download = `resume-analytics-${id}.json`;
+    // link.click();
+    // URL.revokeObjectURL(url);
+    let i = 1;
+    jsonToPdfBrowser(analyticsData, `resume-analytics.pdf`);
+    i++;
   };
 
   if (loading) {

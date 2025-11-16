@@ -160,3 +160,48 @@ export const previewPDF = async (element) => {
     };
   }
 };
+
+/**
+ * Convert any JSON (object/array/string) to a downloadable PDF in the browser.
+ * @param {any} json - JSON value (object/array/string)
+ * @param {string} filename - filename to download (default: "data.pdf")
+ * @param {object} [options] - optional settings: { fontSize, lineHeight, margin, pageSize }
+ */
+export const jsonToPdfBrowser = (json, filename = "data.pdf", options = {}) => {
+  const {
+    fontSize = 10,
+    lineHeight = 1.2,
+    margin = 20,
+    pageSize = "a4",
+    orientation = "portrait"
+  } = options;
+
+  const doc = new jsPDF({ unit: "pt", format: pageSize, orientation });
+  doc.setFontSize(fontSize);
+
+  // turn json into pretty multi-line string
+  const jsonString = typeof json === "string" ? json : JSON.stringify(json, null, 2);
+
+  // convert to lines that fit the page width
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const usableWidth = pageWidth - margin * 2;
+  const lines = doc.splitTextToSize(jsonString, usableWidth);
+
+  // line height in points
+  const lineHeightPt = fontSize * lineHeight;
+
+  let cursorY = margin;
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  for (let i = 0; i < lines.length; i++) {
+    if (cursorY + lineHeightPt > pageHeight - margin) {
+      doc.addPage();
+      cursorY = margin;
+    }
+    doc.text(lines[i], margin, cursorY);
+    cursorY += lineHeightPt;
+  }
+
+  // trigger download
+  doc.save(filename);
+};
