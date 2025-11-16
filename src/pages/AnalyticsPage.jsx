@@ -67,9 +67,9 @@ const AnalyticsPage = () => {
     // link.download = `resume-analytics-${id}.json`;
     // link.click();
     // URL.revokeObjectURL(url);
-    let i = 1;
+    // let i = 1;
     jsonToPdfBrowser(analyticsData, `resume-analytics.pdf`);
-    i++;
+    // i++;
   };
 
   if (loading) {

@@ -13,8 +13,8 @@ import { exportToPDF, generatePDFFilename } from '../utils/pdfExporter';
 // Template imports
 const templateOptions = [
   { value: 'modern', label: 'Modern' },
-  { value: 'classic', label: 'Classic' },
-  { value: 'minimalist', label: 'Minimalist' },
+  // { value: 'classic', label: 'Classic' },
+  // { value: 'minimalist', label: 'Minimalist' },
   { value: 'creative', label: 'Creative' },
   { value: 'executive', label: 'Executive' },
   { value: 'ats', label: 'ATS Optimized' },
